@@ -269,8 +269,16 @@ isochrone <- function(r5r_core,
           
           temp_iso <- concaveman::concaveman(temp)
           temp_iso$isochrone <- cut
+          temp_iso$geometry <- 
           return(temp_iso)
           
+          
+        } else {
+          
+          temp_iso <- data.table()
+          temp_iso$isochrone <- cut
+          temp_iso <- sf::st_sf(temp_iso, geometry = sf::st_sfc(sf::st_polygon()))
+          return(temp_iso)
           
         }
       }
