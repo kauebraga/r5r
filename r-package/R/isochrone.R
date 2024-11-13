@@ -275,6 +275,7 @@ isochrone <- function(r5r_core,
           
         } else {
           
+          if(nrow(temp)<=4){print(paste0("Your origin point ", orig," is probably located in an area where the road density is too low to create proper isochrone polygons and/or the time cutoff is too short. In this case, we strongly recommend setting `polygon_output = FALSE` or setting longer cutoffs."))}
           temp_iso <- data.table::data.table()
           temp_iso$isochrone <- cut
           temp_iso <- sf::st_sf(temp_iso, polygons = sf::st_sfc(sf::st_polygon()))
@@ -283,7 +284,7 @@ isochrone <- function(r5r_core,
         }
       }
       iso_list <- lapply(X=cutoffs[cutoffs>0], FUN=get_poly)
-      iso <- data.table::rbindlist(iso_list, ignore.attr=TRUE)
+      iso <- data.table::rbindlist(iso_list, ignore.attr=TRUE, use.names=TRUE)
       iso[, id := orig]
       iso <- iso[ order(-isochrone), ]
       data.table::setcolorder(iso, c('id', 'isochrone'))
