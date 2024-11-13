@@ -283,7 +283,7 @@ isochrone <- function(r5r_core,
         }
       }
       iso_list <- lapply(X=cutoffs[cutoffs>0], FUN=get_poly)
-      iso <- data.table::rbindlist(iso_list)
+      iso <- data.table::rbindlist(iso_list, ignore.attr=TRUE)
       iso[, id := orig]
       iso <- iso[ order(-isochrone), ]
       data.table::setcolorder(iso, c('id', 'isochrone'))
