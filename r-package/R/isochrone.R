@@ -265,11 +265,14 @@ isochrone <- function(r5r_core,
       get_poly <- function(cut){ # cut = 30
         temp <- subset(dest, travel_time_p50 <= cut)
 
-        if(nrow(temp)<=2){stop(paste0("Your origin point ", orig," is probably located in an area where the road density is too low to create proper isochrone polygons and/or the time cutoff is too short. In this case, we strongly recommend setting `polygon_output = FALSE` or setting longer cutoffs."))}
-
-        temp_iso <- concaveman::concaveman(temp)
-        temp_iso$isochrone <- cut
-        return(temp_iso)
+        if(nrow(temp)>=3) {
+          
+          temp_iso <- concaveman::concaveman(temp)
+          temp_iso$isochrone <- cut
+          return(temp_iso)
+          
+          
+        }
       }
       iso_list <- lapply(X=cutoffs[cutoffs>0], FUN=get_poly)
       iso <- data.table::rbindlist(iso_list)
