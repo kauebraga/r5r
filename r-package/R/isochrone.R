@@ -316,7 +316,17 @@ isochrone <- function(r5r_core,
     # get the isocrhone from each origin
     library(parallel)
     prep_iso <- ifelse(isTRUE(polygon_output), prep_iso_poly, prep_iso_lines)
-    iso_list <- parallel::mclapply(X = unique(origins$id), FUN = prep_iso, mc.cores = n_threads_iso)
+    if (n_threads_iso > 1) {
+      
+      iso_list <- parallel::mclapply(X = unique(origins$id), FUN = prep_iso, mc.cores = n_threads_iso)  
+      
+    } else
+      
+    {
+      
+      iso_list <- lapply(unique(origins$id), prep_iso)  
+    }
+    
 
     # put output together
     iso <- data.table::rbindlist(iso_list)
